@@ -115,6 +115,8 @@ def feature_overview(db):
             median_colls
         )
 
+        st.caption("The orange bar indicates the median.")
+
         base = (
             alt.Chart(aggregated)
         )
