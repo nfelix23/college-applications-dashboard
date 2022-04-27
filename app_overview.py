@@ -17,9 +17,9 @@ def select_college_types(st_key):
         key = st_key,
     )
 
-    lst_selection = options_dct[str_selection]
+    set_selection = options_dct[str_selection]
 
-    return str_selection, lst_selection
+    return str_selection, set_selection
 
 def select_to_count(st_key):
     """Let the user select whether to count students or applications."""
@@ -114,12 +114,12 @@ def feature_overview(db):
             .reset_index(drop = False)
         )
 
-        str_coll_types, lst_coll_types = select_college_types(st_key = "num_colleges_applied")
+        str_coll_types, set_coll_types = select_college_types(st_key = "num_colleges_applied")
 
         filtered = (
             coll_per_student
             .loc[
-                coll_per_student["college_type"].isin(lst_coll_types)
+                coll_per_student["college_type"].isin(set_coll_types)
             ]
             .pivot_table(index = "respondent_code", values = "num_colleges", aggfunc = "sum")
             .reset_index(drop = False)
@@ -195,13 +195,13 @@ def feature_overview(db):
 
         to_count = select_to_count(st_key = "locations")
 
-        str_coll_types, lst_coll_types = select_college_types(st_key = "locations")
+        str_coll_types, set_coll_types = select_college_types(st_key = "locations")
 
         if to_count == "applications":
 
             locations = (
                 db.main
-                .loc[db.main["college_type"].isin(lst_coll_types)]
+                .loc[db.main["college_type"].isin(set_coll_types)]
                 .pivot_table(index = ["location", "college_type"], values = "index", aggfunc = "count")
                 .reset_index(drop = False)
                 .rename(columns = {"index": "num"})
@@ -211,7 +211,7 @@ def feature_overview(db):
             locations = (
                 db.main
                 .loc[
-                    db.main["college_type"].isin(lst_coll_types),
+                    db.main["college_type"].isin(set_coll_types),
                     ["index", "location", "college_type", "respondent_code"]
                 ]
                 .drop_duplicates(["location", "college_type", "respondent_code"])
@@ -276,7 +276,7 @@ def feature_overview(db):
 
         to_count = select_to_count(st_key = info_type)
 
-        str_coll_types, lst_coll_types = select_college_types(st_key = info_type)
+        str_coll_types, set_coll_types = select_college_types(st_key = info_type)
 
         reference_df = db.ddict.loc[
             db.ddict["info_type"] == info_type,
@@ -295,7 +295,7 @@ def feature_overview(db):
 
         filtered_df = db.main[cols_to_take]
 
-        filtered_df = filtered_df.loc[filtered_df["college_type"].isin(lst_coll_types)]
+        filtered_df = filtered_df.loc[filtered_df["college_type"].isin(set_coll_types)]
 
         melted = (
             pd.melt(
