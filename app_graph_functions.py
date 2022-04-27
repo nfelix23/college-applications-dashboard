@@ -5,19 +5,27 @@ import altair as alt
 
 def select_college_types(st_key):
     """Let the user select one or both college types."""
-    options_dct = {
-        "local": set(["local"]),
-        "international": set(["international"]),
-        "local and international": set(["local", "international"]),
-    }
 
-    str_selection = st.radio(
-        "Include college types:",
-        options = options_dct.keys(),
-        key = st_key,
-    )
+    st.markdown("Select college types to include.")
 
-    set_selection = options_dct[str_selection]
+    options = ["local", "international"]
+    set_selection = set()
+
+    for option in options:
+        checked = st.checkbox(
+            option,
+            value = True,
+            key = f"{st_key} {option}"
+        )
+
+        if checked:
+            set_selection.add(option)
+
+    if len(set_selection) == 0:
+        st.caption("No specific option was selected, so all options will be included.")
+        set_selection.update(options)
+
+    str_selection = " and ".join(list(set_selection))
 
     return str_selection, set_selection
 
