@@ -36,10 +36,9 @@ if __name__ == "__main__":
         ],
     )
     conn = connect(credentials = credentials)
-    sheet_names_urls = {
-        "main": st.secrets["private_gsheets_url_main"],
-        "ddict": st.secrets["private_gsheets_url_data_dictionary"],
-    }
+
+    # Dictionary containing sheet names and their respective URLs
+    sheets_urls = st.secrets["private_gsheets_url"]
 
     @st.cache(suppress_st_warning = True, allow_output_mutation = True)
     def get_data():
@@ -48,8 +47,8 @@ if __name__ == "__main__":
         # This dictionary will contain both data sheets
         db = {}
 
-        for sheet_name in sheet_names_urls:
-            url = sheet_names_urls[sheet_name]
+        for sheet_name in sheets_urls:
+            url = sheets_urls[sheet_name]
 
             # Query the Google Sheets file.
             query = f'SELECT * FROM "{url}"'
@@ -72,6 +71,16 @@ if __name__ == "__main__":
                 db.main[row["var_name"]]
                 .astype(row["primitive_type"])
             )
+
+        # Merge colleges sheet into main sheet
+        db.main = (
+            db.main
+            .merge(
+                right = db.colleges,
+                on = "name",
+                how = "left",
+            )
+        )
 
         return db
 
