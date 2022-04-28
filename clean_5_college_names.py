@@ -65,5 +65,6 @@ names_last_check.to_csv("./private/cleaning_outputs/names_last_check.csv", index
 names_last_check.head()
 #%%
 # If last check shows no problems, save the final cleaned dataset.
-cleaned_df.to_csv("./private/cleaning_outputs/final_cleaned_df.csv", index = False)
+cleaned_df.to_csv("./private/cleaning_outputs/cleaned_college_names_final.csv", index = False)
+
 #%%
