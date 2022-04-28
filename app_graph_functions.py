@@ -22,7 +22,7 @@ def select_college_types(st_key):
             set_selection.add(option)
 
     if len(set_selection) == 0:
-        st.caption("No specific option was selected, so all options will be included.")
+        st.caption("Since no college types were selected, all colleges will be included.")
         set_selection.update(options)
 
     str_selection = " and ".join(list(set_selection))
