@@ -71,31 +71,24 @@ def feature_overview(db):
 
     def chart_num_colleges(db = db):
 
-        coll_per_student = (
-            db.main
-            .pivot_table(index = ["respondent_code", "college_type"], values = "index", aggfunc = "count")
-            .rename(columns = {"index": "num_colleges"})
-            .reset_index(drop = False)
-        )
-
         str_coll_types, set_coll_types = select_college_types(st_key = "num_colleges_applied")
 
         filtered = (
-            coll_per_student
+            db.apps
             .loc[
-                coll_per_student["college_type"].isin(set_coll_types)
+                db.apps["college_type"].isin(set_coll_types)
             ]
-            .pivot_table(index = "respondent_code", values = "num_colleges", aggfunc = "sum")
+            .pivot_table(index = "respondent_code", values = "num_apps", aggfunc = "sum")
             .reset_index(drop = False)
         )
 
         total_students = filtered["respondent_code"].drop_duplicates().shape[0]
 
-        median_colls = int(filtered["num_colleges"].median())
+        median_colls = int(filtered["num_apps"].median())
 
         aggregated = (
             filtered
-            .pivot_table(index = "num_colleges", values = "respondent_code", aggfunc = "count")
+            .pivot_table(index = "num_apps", values = "respondent_code", aggfunc = "count")
             .reset_index(drop = False)
             .rename(columns = {"respondent_code": "num_students"})
         )
@@ -108,7 +101,7 @@ def feature_overview(db):
 
         aggregated["perc_str"] = make_perc_col(aggregated["perc"])
 
-        aggregated["is_median"] = aggregated["num_colleges"].eq(median_colls).apply(lambda x: "Yes" if x else "No")
+        aggregated["is_median"] = aggregated["num_apps"].eq(median_colls).apply(lambda x: "Yes" if x else "No")
 
         st.metric(
             "Median Number of Colleges Applied To",
@@ -124,7 +117,7 @@ def feature_overview(db):
             base
             .mark_bar()
             .encode(
-                x = alt.Y("num_colleges:O", title = "Number of Colleges"),
+                x = alt.Y("num_apps:O", title = "Number of Colleges"),
                 y = alt.X("num_students:Q", title = "Number of Students"),
                 color = alt.Color("is_median:N", legend = None),
                 tooltip = [
