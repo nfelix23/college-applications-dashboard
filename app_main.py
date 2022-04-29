@@ -82,6 +82,17 @@ if __name__ == "__main__":
             )
         )
 
+        # Make new sheet with number of applications per student
+        db["apps"] = (
+            db.main
+            .pivot_table(
+                index = ["respondent_code", "college_type"],
+                aggfunc = "size",
+            )
+            .reset_index(drop = False)
+            .rename(columns = {0: "num_students"})
+        )
+
         return db
 
     # Obtain data.
