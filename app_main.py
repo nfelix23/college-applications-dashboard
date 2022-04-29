@@ -83,15 +83,25 @@ if __name__ == "__main__":
         )
 
         # Make new sheet with number of applications per student
-        db["apps"] = (
-            db.main
-            .pivot_table(
-                index = ["respondent_code", "college_type"],
-                aggfunc = "size",
-            )
-            .reset_index(drop = False)
-            .rename(columns = {0: "num_apps"})
-        )
+        apps_rows = []
+
+        college_types = ["local", "international"]
+        res_codes = db.main["respondent_code"].drop_duplicates().tolist()
+        for res_code in res_codes:
+            for college_type in college_types:
+                filtered = (
+                    db.main
+                    .loc[
+                        (db.main["respondent_code"] == res_code) & (db.main["college_type"] == college_type)
+                    ]
+                )
+
+                num_apps = filtered.shape[0]
+                new_row = {"respondent_code": res_code, "college_type": college_type, "num_apps": num_apps}
+                new_row = pd.Series(new_row)
+                apps_rows.append(new_row)
+
+        db["apps"] = pd.DataFrame(apps_rows).reset_index(drop = True)
 
         return db
 
