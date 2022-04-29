@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 aggfunc = "size",
             )
             .reset_index(drop = False)
-            .rename(columns = {0: "num_students"})
+            .rename(columns = {0: "num_apps"})
         )
 
         return db
