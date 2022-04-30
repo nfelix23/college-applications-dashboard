@@ -135,7 +135,6 @@ def chart_checkbox(
     if debug:
         st.write(apps_filtered)
         st.write(main_filtered)
-        st.write(scored_df)
         st.write(raw_scores)
         st.write(scored_series)
         st.write(scored_df)
