@@ -75,8 +75,13 @@ def chart_checkbox(
 
     reference_df = db.ddict.loc[
         db.ddict["info_type"] == info_type,
-        ["var_name", "long_name", "is_other"]
+        ["var_name", "long_name", "is_other", "college_type"]
     ]
+
+    if info_type == "location":
+        reference_df = reference_df.loc[
+            reference_df["college_type"].isin(set_coll_types)
+        ]
 
     bool_cols = reference_df["var_name"].tolist()
 
@@ -127,7 +132,17 @@ def chart_checkbox(
         )
     )
 
-    scored_df["option_type"] = scored_df["is_other"].apply(lambda b: "Other Option" if b else "Given Option")
+    # option_type column depends on the info_type.
+    # for locations, they are grouped into local and international
+    # for interests and characteristics, they are grouped into other options and given options
+    if info_type == "location":
+        scored_df["option_type"] = scored_df["college_type"].apply(
+            lambda x: x.title()
+        )
+    else:
+        scored_df["option_type"] = scored_df["is_other"].apply(
+            lambda x: "Other Option" if x else "Given Option"
+        )
 
     scored_df["perc_str"] = make_perc_col(scored_df["perc"])
 
