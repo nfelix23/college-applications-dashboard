@@ -4,7 +4,7 @@ import streamlit as st
 import altair as alt
 
 # Import custom functions for graph creation
-from app_graph_functions import select_college_types, select_to_count, make_perc_col
+from app_graph_functions import select_college_types, select_to_count, make_perc_col, chart_checkbox
 
 def feature_overview(db):
     st.markdown("""## Overview Charts\n\nThis section provides a general overview of the survey results.""")
@@ -148,237 +148,30 @@ def feature_overview(db):
 
     # Location
 
-    st.markdown("## Locations of Colleges")
-
-    def chart_locations(db = db):
-
-        to_count = select_to_count(st_key = "locations")
-
-        str_coll_types, set_coll_types = select_college_types(st_key = "locations")
-
-        if to_count == "applications":
-
-            locations = (
-                db.main
-                .loc[db.main["college_type"].isin(set_coll_types)]
-                .pivot_table(index = ["location", "college_type"], values = "index", aggfunc = "count")
-                .reset_index(drop = False)
-                .rename(columns = {"index": "num"})
-            )
-
-        elif to_count == "students":
-            locations = (
-                db.main
-                .loc[
-                    db.main["college_type"].isin(set_coll_types),
-                    ["index", "location", "college_type", "respondent_code"]
-                ]
-                .drop_duplicates(["location", "college_type", "respondent_code"])
-                .pivot_table(index = ["location", "college_type"], values = "index", aggfunc = "count")
-                .reset_index(drop = False)
-                .rename(columns = {"index": "num"})
-            )
-
-        total_num = locations["num"].sum()
-
-        locations["perc"] = (locations["num"] / total_num * 100).round(2)
-        locations["perc_str"] = make_perc_col(locations["perc"])
-
-        top_index = locations["num"].idxmax()
-        top_name = locations.at[top_index, "location"]
-        top_score = locations.at[top_index, "perc_str"]
-
-        st.write(f"Top location: **{top_name}**, with {top_score} of {to_count} with regard to {str_coll_types} colleges.")
-
-        var_title = f"Number of {to_count}"
-
-        source = alt.Chart(locations)
-
-        y_sort = alt.EncodingSortField("num", order = "descending")
-
-        bar = (
-            source
-            .mark_bar()
-            .encode(
-                x = alt.X("num:Q", title = var_title),
-                y = alt.Y("location:N", title = "Location", sort = y_sort),
-                color = alt.Color("college_type:N", title = "College Type"),
-                tooltip = [alt.Tooltip("num:Q", title = var_title)],
-            )
-        )
-        text = (
-            source
-            .mark_text()
-            .encode(
-                text = alt.Text("perc_str:N"),
-                y = alt.Y("location:N", title = "Location", sort = y_sort, axis = None),
-            )
-            .properties(width = 50)
-        )
-        chart = alt.hconcat(bar, text, spacing = 0)
-
-        st.altair_chart(chart, use_container_width = True)
-
-        return
-
-    chart_locations()
-
-    # Function for both interests and characteristics
-
-    def chart_checkbox(
-        info_type, # str, whether interests or characteristics
-        singular, # str, singular form of info_type, for grammar purposes
-        intro, # str, the introductory text for the chart
+    chart_checkbox(
         db = db,
-    ):
-        st.markdown(intro)
-
-        to_count = select_to_count(st_key = info_type)
-
-        str_coll_types, set_coll_types = select_college_types(st_key = info_type)
-
-        reference_df = db.ddict.loc[
-            db.ddict["info_type"] == info_type,
-            ["var_name", "long_name"]
-        ]
-        
-        info_type_cols = reference_df["var_name"].tolist()
-
-        var_to_long = {
-            row["var_name"]: row["long_name"]
-            for index, row in reference_df.iterrows()
-        }
-
-        id_vars = ["index", "respondent_code", "college_type"]
-        cols_to_take = id_vars + info_type_cols
-
-        filtered_df = db.main[cols_to_take]
-
-        filtered_df = filtered_df.loc[filtered_df["college_type"].isin(set_coll_types)]
-
-        melted = (
-            pd.melt(
-                filtered_df,
-                id_vars = id_vars,
-                value_vars = info_type_cols,
-                value_name = "checked",
-            )
-            .rename(columns = {"variable": "option"})
-        )
-
-        if to_count == "students":
-            total_num = filtered_df.drop_duplicates("respondent_code").shape[0]
-
-            aggregated = (
-                melted
-                .pivot_table(
-                    index = ["option", "respondent_code"],
-                    values = ["checked"],
-                    aggfunc = "any",
-                )
-                .reset_index(drop = False)
-                .pivot_table(
-                    index = ["option"],
-                    values = ["checked"],
-                    aggfunc = "sum",
-                )
-                .reset_index(drop = False)
-                .rename(columns = {"checked": "num"})
-            )
-
-        elif to_count == "applications":
-            total_num = filtered_df.shape[0]
-
-            aggregated = (
-                melted
-                .pivot_table(
-                    index = ["option"],
-                    values = ["checked"],
-                    aggfunc = "sum",
-                )
-                .reset_index(drop = False)
-                .rename(columns = {"checked": "num"})
-            )
-        
-        # Add column indicating whether it is an Other option
-        aggregated = aggregated.merge(
-            db.ddict[["var_name", "is_other"]],
-            how = "left",
-            left_on = "option",
-            right_on = "var_name",
-        )
-
-        aggregated["option_type"] = aggregated["is_other"].replace(
-            {
-                True: "Other Option",
-                False: "Given Option",
-            }
-        )
-
-        aggregated["long_name"] = aggregated["option"].replace(var_to_long)
-
-        aggregated["perc"] = (aggregated["num"] / total_num * 100).round(2)
-        aggregated["perc_str"] = make_perc_col(aggregated["perc"])
-
-        top_index = aggregated["num"].idxmax()
-        top_name = aggregated.at[top_index, "long_name"]
-        top_score = aggregated.at[top_index, "perc_str"]
-
-        st.write(f"Top {singular}: **{top_name}**, with {top_score} of {to_count} with regard to {str_coll_types} colleges.")
-
-        num_var_title = f"Number of {to_count}"
-        opt_var_title = singular.title()
-
-        source = alt.Chart(aggregated)
-
-        y_sort = alt.EncodingSortField("num", order = "descending")
-
-        bar = (
-            source
-            .mark_bar()
-            .encode(
-                x = alt.X("num:Q", title = num_var_title),
-                y = alt.Y("option:N", title = opt_var_title, sort = y_sort),
-                color = alt.Color("option_type:N", title = "Option Type"),
-                tooltip = [
-                    alt.Tooltip("long_name:N", title = "Option"),
-                    alt.Tooltip("num:Q", title = num_var_title),
-                ],
-            )
-        )
-        text = (
-            source
-            .mark_text(
-                align = "right",
-                baseline = "middle",
-                dx = 20,
-            )
-            .encode(
-                text = alt.Text("perc_str:N"),
-                y = alt.Y("option:N", title = opt_var_title, sort = y_sort, axis = None),
-            )
-            .properties(width = 50)
-        )
-        chart = alt.hconcat(bar, text, spacing = 0)
-
-        st.altair_chart(chart, use_container_width = True)
-
-        st.caption("Percentages may not add up to exactly 100% because respondents were allowed to check multiple options for each application.")
-
-        return
+        info_type = "location",
+        singular = "location",
+        intro = "## Locations of Colleges\n\nThis chart shows the locations of the colleges where students applied.",
+        st_key = "location_chart",
+    )
 
     # Interests
 
     chart_checkbox(
-        "interests",
-        "interest",
-        "## Interests\n\nThis chart is about the fields of study that were the reasons behind students' college application choices."
+        db = db,
+        info_type = "interests",
+        singular = "interest",
+        intro = "## Interests\n\nThis chart is about the fields of study that were the reasons behind students' college application choices.",
+        st_key = "interests_chart",
     )
 
     # Characteristics
 
     chart_checkbox(
-        "characteristics",
-        "characteristic",
-        "## Characteristics\n\nThis chart is about the college characteristics that were the reasons behind students' application choices."
+        db = db,
+        info_type = "characteristics",
+        singular = "characteristic",
+        intro = "## Characteristics\n\nThis chart is about the college characteristics that were the reasons behind students' application choices.",
+        st_key = "characteristics_chart",
     )

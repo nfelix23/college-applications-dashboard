@@ -67,10 +67,11 @@ if __name__ == "__main__":
 
         # Cast columns to appropriate types, based on data dictionary
         for index, row in db.ddict.iterrows():
-            db.main[row["var_name"]] = (
-                db.main[row["var_name"]]
-                .astype(row["primitive_type"])
-            )
+            if row["initially_present"]:
+                db.main[row["var_name"]] = (
+                    db.main[row["var_name"]]
+                    .astype(row["primitive_type"])
+                )
 
         # Merge colleges sheet into main sheet
         db.main = (
@@ -82,26 +83,25 @@ if __name__ == "__main__":
             )
         )
 
+        # Pivot out the locations into bool columns
+        unique_locs = db.ddict.loc[
+            db.ddict["info_type"] == "location"
+        ]
+
+        for index, row in unique_locs.iterrows():
+            db.main[row["var_name"]] = db.main["location"] == row["long_name"]
+
         # Make new sheet with number of applications per student
-        apps_rows = []
-
-        college_types = ["local", "international"]
-        res_codes = db.main["respondent_code"].drop_duplicates().tolist()
-        for res_code in res_codes:
-            for college_type in college_types:
-                filtered = (
-                    db.main
-                    .loc[
-                        (db.main["respondent_code"] == res_code) & (db.main["college_type"] == college_type)
-                    ]
-                )
-
-                num_apps = filtered.shape[0]
-                new_row = {"respondent_code": res_code, "college_type": college_type, "num_apps": num_apps}
-                new_row = pd.Series(new_row)
-                apps_rows.append(new_row)
-
-        db["apps"] = pd.DataFrame(apps_rows).reset_index(drop = True)
+        db["apps"] = (
+            db.main
+            .pivot_table(
+                index = ["respondent_code", "college_type"],
+                values = "index",
+                aggfunc = "count",
+            )
+            .reset_index(drop = False)
+            .rename(columns = {"index": "num_apps"})
+        )
 
         return db
 
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         )
 
     if feature == "page1":
-        feature_home()
+        feature_home(db)
 
     elif feature == "page2":
         feature_overview(db)
