@@ -4,7 +4,7 @@ import streamlit as st
 import altair as alt
 
 # Import custom functions for graph creation
-from app_graph_functions import select_college_types, select_to_count, make_perc_col, chart_checkbox
+from app_graph_functions import select_college_types, make_perc_col, chart_checkbox
 
 def feature_overview(db):
     st.markdown("""## Overview Charts\n\nThis section provides a general overview of the survey results.""")
