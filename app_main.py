@@ -123,7 +123,7 @@ if __name__ == "__main__":
         )
 
     if feature == "page1":
-        feature_home(db)
+        feature_home()
 
     elif feature == "page2":
         feature_overview(db)
