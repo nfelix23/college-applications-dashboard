@@ -96,11 +96,6 @@ def feature_breakdown(db):
 
     no_filter = len(selected_columns) == 0
 
-    if no_filter:
-        st.markdown("No specific interests or characteristics were selected, so colleges will be ranked by number of students who applied.")
-    else:
-        st.markdown("Some specific interests or characteristics were selected. These will be considered when ranking colleges.")
-
     # Calculate rankings
     if not st.checkbox("Calculate rankings"):
         st.stop()
