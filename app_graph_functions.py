@@ -89,7 +89,7 @@ def chart_checkbox(
 
     main_filtered = main_filtered.loc[:, selection]
     
-    scored_df = (
+    raw_scores = (
         main_filtered
         .pivot_table(
             index = ["respondent_code"],
@@ -100,7 +100,7 @@ def chart_checkbox(
     )
 
     raw_scores = (
-        scored_df
+        raw_scores
         .merge(
             right = apps_filtered[["respondent_code", "num_apps"]],
             on = "respondent_code",
