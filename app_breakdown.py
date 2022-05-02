@@ -22,8 +22,13 @@ def feature_breakdown(db):
         checkbox_selections = {}
 
         final_info_types = []
+
+        ddict_location_mask = (
+            (db.ddict["info_type"] == "location")
+            & (db.ddict["college_type"].isin(set_college_types))
+        )
         
-        selected_locations = db.ddict.loc[db.ddict["info_type"] == "location", "var_name"].tolist()
+        selected_locations = db.ddict.loc[ddict_location_mask, "var_name"].tolist()
 
         for info_type in checkbox_info_types:
             st.markdown(f"### {info_type.title()}")
@@ -33,6 +38,7 @@ def feature_breakdown(db):
             any_or_specific = st.radio(
                 label = f"Select {info_type}",
                 options = ["Any", choose_specific],
+                key = f"any_or_specific {info_type}",
             )
             
             if any_or_specific == choose_specific:
@@ -65,7 +71,7 @@ def feature_breakdown(db):
                     label = "Click the bar to see a dropdown list. You may also type a word inside the bar in order to search for it.",
                     options = var_to_long.keys(),
                     format_func = lambda x: var_to_long[x],
-                    key = f"{info_type} {str_college_types}",
+                    key = f"multiselect {info_type} {str_college_types}",
                 )
 
                 if len(multi) == 0:
@@ -85,9 +91,12 @@ def feature_breakdown(db):
         st.stop()
 
     # Put location info in `selected_locations`
-    if "location" in checkbox_selections:
-        selected_locations = checkbox_selections["location"]
+    if "location" in final_info_types:
+        selected_locations = pd.Series(checkbox_selections["location"])
         del checkbox_selections["location"]
+    else:
+        # If location is not in the list, add it to the start
+        final_info_types = ["location"] + final_info_types
 
     # Check if filtering options were chosen
     selected_columns = []
@@ -229,12 +238,11 @@ def feature_breakdown(db):
 
                 for info_type in final_info_types:
 
-                    st.markdown(f"{info_type.title()}:")
-
                     if info_type == "location":
-                        st.markdown(row_rank["location"])
+                        st.markdown(f"{info_type.title()}: {row_rank['location']}")
 
                     else:
+                        st.markdown(f"{info_type.title()}:")
 
                         filtered_reference_df = selected_reference_df.loc[
                             selected_reference_df["info_type"] == info_type
