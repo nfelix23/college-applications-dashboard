@@ -285,4 +285,5 @@ def feature_breakdown(db):
 
                             st.markdown(f"- {long_name}: **{num_students} students**")
 
-                    st.markdown("---")
+                    # Display a newline to add extra space between sections
+                    st.markdown("\n")
