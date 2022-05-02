@@ -62,21 +62,51 @@ def feature_breakdown(db):
 
                 reference_df = db.ddict.loc[mask]
 
-                var_to_long = {
+                var_to_long_filtered = {
                     row["var_name"]: row["long_name"]
                     for index, row in reference_df.iterrows()
                 }
 
+                # If user is filtering locations, key of multiselect widget should include the chosen college types.
+                # This way, if the user selects a different set of college types, the location multiselect widget will update its options to include only locations that match those college types.
+                if info_type == "location":
+                    multi_key = f"multiselect {info_type} {str_college_types}"
+                else:
+                    multi_key = f"multiselect {info_type}"
+
                 multi = st.multiselect(
                     label = "Click the bar to see a dropdown list. You may also type a word inside the bar in order to search for it.",
-                    options = var_to_long.keys(),
-                    format_func = lambda x: var_to_long[x],
-                    key = f"multiselect {info_type} {str_college_types}",
+                    options = var_to_long_filtered.keys(),
+                    format_func = lambda x: var_to_long_filtered[x],
+                    key = multi_key,
                 )
 
                 if len(multi) == 0:
                     st.warning("No options are selected. Please select at least 1.")
                 checkbox_selections[info_type] = multi
+
+    # Show summary of filter choices
+    st.markdown("## Selected Filters")
+    st.markdown(f"College types: {str_college_types}")
+
+    # Dictionary of variable names and corresponding long names
+    # Contains variable names from all of the three relevant info types
+    var_to_long_general = {
+        row["var_name"]: row["long_name"]
+        for index, row in db.ddict.iterrows()
+    }
+
+    for info_type in checkbox_info_types:
+        if info_type in checkbox_selections:
+            multi_var_name = checkbox_selections[info_type]
+            multi_long_name = [var_to_long_general[v] for v in multi_var_name]
+            multi_monospace = [f"`{long_name}`" for long_name in multi_long_name]
+
+            multi_str = " | ".join(multi_monospace)
+
+            st.markdown(f"{info_type.title()}: {multi_str}")
+        else:
+            st.markdown(f"{info_type.title()}: any")
 
     # Show rankings
 
