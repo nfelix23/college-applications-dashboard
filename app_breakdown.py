@@ -196,7 +196,7 @@ def feature_breakdown(db):
             num_students = row_rank["num_students"]
             locn = row_rank["location"]
 
-            st.markdown(f"{rank}. {college_name}")
+            st.markdown(f"{rank}. **{college_name}**")
 
             with st.expander("More information", expanded = False):
 
