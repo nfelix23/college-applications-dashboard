@@ -177,12 +177,14 @@ def feature_breakdown(db):
 
         default_value = 10 if total_num_colleges >= 10 else total_num_colleges
 
-        show_top = st.number_input(
+        show_top = st.slider(
             "Show how many colleges?",
             min_value = 1,
             max_value = total_num_colleges,
             value = default_value,
         )
+
+        st.markdown("---")
 
         for i, row_rank in rank_df.iterrows():
 
