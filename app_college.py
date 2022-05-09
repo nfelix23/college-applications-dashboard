@@ -7,6 +7,9 @@ import app_graph_functions as agf
 
 def feature_college(db):
 
+    st.markdown("## College Info Charts")
+    st.markdown("Select one college from the dropdown box below in order to see information and charts.")
+
     # Let user select a college
     selected_college_index = st.selectbox(
         "College Name",
