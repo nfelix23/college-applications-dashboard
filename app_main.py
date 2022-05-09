@@ -6,7 +6,6 @@ Main script for the College Applications Dashboard.
 import pandas as pd
 import numpy as np
 import streamlit as st
-from scipy import stats
 
 # For connecting to private Google Sheets file
 from google.oauth2 import service_account
