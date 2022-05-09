@@ -5,7 +5,6 @@ import altair as alt
 
 # Import custom functions for graph creation
 import app_general_functions as agf
-from app_general_functions import select_college_types, make_perc_col
 
 def feature_overview(db):
     st.markdown("""## Overview Charts\n\nThis section provides a general overview of the survey results.""")
@@ -37,7 +36,7 @@ def feature_overview(db):
 
         res_df["perc"] = (res_df["number"] / total_g12 * 100).round(2)
 
-        res_df["perc_str"] = make_perc_col(res_df["perc"])
+        res_df["perc_str"] = agf.make_perc_col(res_df["perc"])
 
         base = (
             alt.Chart(res_df)
@@ -72,7 +71,7 @@ def feature_overview(db):
 
     def chart_num_colleges(db = db):
 
-        str_coll_types, set_coll_types = select_college_types(st_key = "num_colleges_applied")
+        str_coll_types, set_coll_types = agf.select_college_types(st_key = "num_colleges_applied")
 
         filtered = (
             db.apps
@@ -100,7 +99,7 @@ def feature_overview(db):
             * 100
         ).round(2)
 
-        aggregated["perc_str"] = make_perc_col(aggregated["perc"])
+        aggregated["perc_str"] = agf.make_perc_col(aggregated["perc"])
 
         aggregated["is_median"] = aggregated["num_apps"].eq(median_colls).apply(lambda x: "Yes" if x else "No")
 
@@ -162,7 +161,7 @@ def feature_overview(db):
         st.markdown(intro)
 
         # Ask for college types
-        str_coll_types, set_coll_types = select_college_types(st_key = f"chart_checkbox {st_key}")
+        str_coll_types, set_coll_types = agf.select_college_types(st_key = f"chart_checkbox {st_key}")
 
         # Transform data
         apps_filtered = (
@@ -252,7 +251,7 @@ def feature_overview(db):
                 lambda x: "Other Option" if x else "Given Option"
             )
 
-        scored_df["perc_str"] = make_perc_col(scored_df["perc"])
+        scored_df["perc_str"] = agf.make_perc_col(scored_df["perc"])
 
         # Show intermediary steps
         if debug:
