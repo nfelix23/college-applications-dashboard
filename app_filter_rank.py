@@ -5,15 +5,15 @@ import altair as alt
 
 import app_graph_functions as agf
 
-def feature_breakdown(db):
+def feature_filter_rank(db):
 
-    st.markdown("## Breakdown Page")
+    st.markdown("## Filter and Rank Colleges")
 
     with st.expander("Options", expanded = False):
 
         st.markdown("### College Types")
 
-        str_college_types, set_college_types = agf.select_college_types(st_key = "breakdown")
+        str_college_types, set_college_types = agf.select_college_types(st_key = "filter_rank")
 
         set_exclude_college_types = set(["local", "international"]) - set_college_types
 

@@ -15,7 +15,7 @@ from gsheetsdb import connect
 # Custom imports for app features
 from app_home import feature_home
 from app_overview import feature_overview
-from app_breakdown import feature_breakdown
+from app_filter_rank import feature_filter_rank
 from app_college import feature_college
 import app_graph_functions as agf
 
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         page_names = {
             "page1": "Home Page",
             "page2": "Overview Charts",
-            "page3": "Breakdown Charts",
+            "page3": "Filter and Rank Colleges",
             "page4": "College Info Charts",
         }
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
         feature_overview(db)
 
     elif feature == "page3":
-        feature_breakdown(db)
+        feature_filter_rank(db)
 
     elif feature == "page4":
         feature_college(db)
