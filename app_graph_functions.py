@@ -71,6 +71,7 @@ def chart_of_percentages(df, num_var_title, opt_var_title):
     )
     chart = alt.hconcat(bar, text, spacing = 0)
 
+    st.caption("Hover over each bar for more information.")
     st.altair_chart(chart, use_container_width = True)
 
     return None
