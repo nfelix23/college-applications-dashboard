@@ -9,6 +9,8 @@ def feature_filter_rank(db):
 
     st.markdown("## Filter and Rank Colleges")
 
+    st.markdown("You may click the `Options` button to select criteria for filtering colleges. Your choices will be summarized under `Selected Filters`. Then, click `Calculate rankings` to see which colleges best match your criteria.")
+
     with st.expander("Options", expanded = False):
 
         st.markdown("### College Types")
