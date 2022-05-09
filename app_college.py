@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import altair as alt
 
-import app_graph_functions as agf
+import app_general_functions as agf
 
 def feature_college(db):
 

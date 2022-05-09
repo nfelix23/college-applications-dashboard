@@ -17,7 +17,7 @@ from app_home import feature_home
 from app_overview import feature_overview
 from app_filter_rank import feature_filter_rank
 from app_college import feature_college
-import app_graph_functions as agf
+import app_general_functions as agf
 
 if __name__ == "__main__":
 
