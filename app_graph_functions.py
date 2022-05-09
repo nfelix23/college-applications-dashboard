@@ -22,17 +22,58 @@ def select_college_types(st_key):
 
     return str_selection, set_selection
 
+def add_perc_symbol(num):
+    """Convert a number to a string with two decimals places and a percent symbol."""
+
+    padded = "{:<02.2f}".format(num)
+    result = f"{padded}%"
+
+    return result
+
 def make_perc_col(series):
     """Convert a numeric series to a string series with % at the end."""
-    def add_perc_symbol(num):
-        padded = "{:<02.2f}".format(num)
-        result = f"{padded}%"
-
-        return result
 
     result = series.apply(add_perc_symbol)
 
     return result
+
+def chart_of_percentages(df, num_var_title, opt_var_title):
+    source = alt.Chart(df)
+
+    y_sort = alt.EncodingSortField("perc", order = "descending")
+
+    bar = (
+        source
+        .mark_bar()
+        .encode(
+            x = alt.X("perc:Q", title = num_var_title),
+            y = alt.Y("var_name:N", title = opt_var_title, sort = y_sort),
+            color = alt.Color("option_type:N", title = "Option Type"),
+            tooltip = [
+                alt.Tooltip("long_name:N", title = "Option"),
+                alt.Tooltip("perc_str:N", title = num_var_title),
+            ],
+        )
+    )
+    
+    text = (
+        source
+        .mark_text(
+            align = "right",
+            baseline = "middle",
+            dx = 20,
+        )
+        .encode(
+            text = alt.Text("perc_str:N"),
+            y = alt.Y("var_name:N", title = opt_var_title, sort = y_sort, axis = None),
+        )
+        .properties(width = 50)
+    )
+    chart = alt.hconcat(bar, text, spacing = 0)
+
+    st.altair_chart(chart, use_container_width = True)
+
+    return None
 
 def chart_checkbox(
     db,
@@ -158,39 +199,7 @@ def chart_checkbox(
     num_var_title = "Score"
     opt_var_title = singular.title()
 
-    source = alt.Chart(scored_df)
-
-    y_sort = alt.EncodingSortField("perc", order = "descending")
-
-    bar = (
-        source
-        .mark_bar()
-        .encode(
-            x = alt.X("perc:Q", title = num_var_title),
-            y = alt.Y("var_name:N", title = opt_var_title, sort = y_sort),
-            color = alt.Color("option_type:N", title = "Option Type"),
-            tooltip = [
-                alt.Tooltip("long_name:N", title = "Option"),
-                alt.Tooltip("perc_str:N", title = num_var_title),
-            ],
-        )
-    )
-    text = (
-        source
-        .mark_text(
-            align = "right",
-            baseline = "middle",
-            dx = 20,
-        )
-        .encode(
-            text = alt.Text("perc_str:N"),
-            y = alt.Y("var_name:N", title = opt_var_title, sort = y_sort, axis = None),
-        )
-        .properties(width = 50)
-    )
-    chart = alt.hconcat(bar, text, spacing = 0)
-
-    st.altair_chart(chart, use_container_width = True)
+    chart_of_percentages(scored_df, num_var_title, opt_var_title)
 
     st.caption("Percentages may not add up to exactly 100% because respondents were allowed to check multiple options for each application.")
 
