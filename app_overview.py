@@ -275,8 +275,6 @@ def feature_overview(db):
 
         agf.chart_of_percentages(scored_df, num_var_title, opt_var_title)
 
-        st.caption("Percentages may not add up to exactly 100% because respondents were allowed to check multiple options for each application.")
-
         return
 
     # Location
