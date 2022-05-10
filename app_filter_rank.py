@@ -221,18 +221,15 @@ def feature_filter_rank(db):
         score_cols = []
 
         for col in selected_columns:
-            # Do modified min-max scaling, such that the modified minimum is (1/100)(range) below the real minimum.
-            real_min = rank_df[col].min()
-            real_max = rank_df[col].max()
-            rng = (real_max - real_min)
-
-            modified_min = real_min - (rng / 100)
-            modified_rng = real_max - modified_min
+            # Do min-max scaling and add 0.01 to all numbers to avoid having zeros.
+            min_value = rank_df[col].min()
+            max_value = rank_df[col].max()
+            rng = (max_value - min_value)
 
             score_col_name = f"{col}_score"
             score_cols.append(score_col_name)
 
-            rank_df[score_col_name] = rank_df[col].sub(modified_min).div(modified_rng)
+            rank_df[score_col_name] = rank_df[col].sub(min_value).div(rng).add(0.01)
 
         # Calculate final score of each college as the product of its individual scores.
         rank_df["final_score"] = rank_df[score_cols].product(axis = 1)
