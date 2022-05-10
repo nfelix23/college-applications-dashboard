@@ -178,7 +178,7 @@ def feature_filter_rank(db):
         total_num_colleges = rank_df.shape[0]
 
         show_top = agf.select_num_colleges(
-            10,
+            5,
             total_num_colleges = total_num_colleges,
             st_key = "no_filter",
         )
@@ -242,7 +242,7 @@ def feature_filter_rank(db):
         total_num_colleges = rank_df.shape[0]
 
         show_top = agf.select_num_colleges(
-            10,
+            5,
             total_num_colleges = total_num_colleges,
             st_key = "with_filter",
         )
