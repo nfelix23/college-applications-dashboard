@@ -177,13 +177,10 @@ def feature_filter_rank(db):
 
         total_num_colleges = rank_df.shape[0]
 
-        default_value = 10 if total_num_colleges >= 10 else total_num_colleges
-
-        show_top = st.slider(
-            "Show how many colleges?",
-            min_value = 1,
-            max_value = total_num_colleges,
-            value = default_value,
+        show_top = agf.select_num_colleges(
+            10,
+            total_num_colleges = total_num_colleges,
+            st_key = "no_filter",
         )
 
         st.markdown("---")
@@ -244,13 +241,10 @@ def feature_filter_rank(db):
 
         total_num_colleges = rank_df.shape[0]
 
-        default_value = 10 if total_num_colleges >= 10 else total_num_colleges
-
-        show_top = st.number_input(
-            "Show how many colleges?",
-            min_value = 1,
-            max_value = total_num_colleges,
-            value = default_value,
+        show_top = agf.select_num_colleges(
+            10,
+            total_num_colleges = total_num_colleges,
+            st_key = "with_filter",
         )
 
         selected_reference_df = db.ddict.loc[db.ddict["var_name"].isin(selected_columns)]

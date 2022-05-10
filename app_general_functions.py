@@ -37,6 +37,19 @@ def make_perc_col(series):
 
     return result
 
+def select_num_colleges(initial_default, total_num_colleges, st_key):
+    final_default = initial_default if total_num_colleges >= initial_default else total_num_colleges
+
+    num_colleges = st.slider(
+        "Show how many colleges?",
+        min_value = 1,
+        max_value = total_num_colleges,
+        value = final_default,
+        key = f"select_num_colleges {st_key}",
+    )
+
+    return num_colleges
+
 def chart_of_percentages(df, num_var_title, opt_var_title):
     source = alt.Chart(df)
 
