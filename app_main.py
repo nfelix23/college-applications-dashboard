@@ -16,6 +16,7 @@ from app_home import feature_home
 from app_overview import feature_overview
 from app_filter_rank import feature_filter_rank
 from app_college import feature_college
+from app_methodology import feature_methodology
 import app_general_functions as agf
 
 if __name__ == "__main__":
@@ -139,10 +140,11 @@ if __name__ == "__main__":
 
     with st.sidebar:
         page_names = {
-            "page1": "Home Page",
-            "page2": "Overview Charts",
-            "page3": "Filter and Rank Colleges",
-            "page4": "College Info Charts",
+            "page_home": "Home Page",
+            "page_methodology": "Methodology and Recommendations",
+            "page_overview": "Overview Charts",
+            "page_filter": "Filter and Rank Colleges",
+            "page_college": "College Info Charts",
         }
 
         # Radio buttons to select pages of the app
@@ -152,14 +154,17 @@ if __name__ == "__main__":
             format_func = lambda key: page_names[key],
         )
 
-    if feature == "page1":
+    if feature == "page_home":
         feature_home()
 
-    elif feature == "page2":
+    elif feature == "page_methodology":
+        feature_methodology()
+
+    elif feature == "page_overview":
         feature_overview(db)
 
-    elif feature == "page3":
+    elif feature == "page_filter":
         feature_filter_rank(db)
 
-    elif feature == "page4":
+    elif feature == "page_college":
         feature_college(db)
