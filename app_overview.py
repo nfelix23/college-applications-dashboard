@@ -65,6 +65,10 @@ def feature_overview(db):
 
     chart_respondent_turnout()
 
+    st.info(
+"""Of the 919 Grade 12 students from the ASHS, only 178 or 19.37% responded. It should be noted, however, that a respondent is not limited to only one application. In total, the survey obtained data on 549 applications."""
+    )
+
     # Number of Colleges Applied To
 
     st.markdown("## Number of Colleges Applied To")
@@ -145,6 +149,14 @@ def feature_overview(db):
         return
 
     chart_num_colleges()
+
+    st.info(
+"""For both local and international colleges, the top number of colleges applied to is two (2) colleges, accounting for 27.53% of the total number of respondents. This is followed by four (4) colleges and three (3) colleges, which garnered 23.60% and 22.47%, respectively. 
+
+The highest number of local colleges applied to by respondents was two (2) colleges with 29.78%, followed by three (3) colleges with 24.72%, and four (4) colleges with 23.60%. Meanwhile, the highest number of international colleges applied to was only one (1) college, which constituted 34.78% of the respondents who applied abroad. This is followed by two (2) colleges at 30.43%, and three (3) colleges at 17.39%. 
+
+The average number of colleges applied to by each respondent for the local, and local & international classifications is three (3) colleges, while, the average number of colleges applied to considering only international schools is two (2) colleges."""
+    )
 
     # Function for all three info_type values
     def chart_checkbox(
@@ -286,6 +298,14 @@ def feature_overview(db):
         st_key = "location_chart",
     )
 
+    st.info(
+"""Considering both local and international applications, the top location of the colleges that the respondents applied to was the National Capital Region (NCR) within the Philippines, which constituted an average of 93.27% of the college applications. This is then followed by North America, which was an average of 3.81% of the total college applications. 
+
+For the local colleges applied to by students, the top location was the National Capital Region, which accounted for 99.19% of the respondents’ total college applications. This is followed by Luzon (outside NCR), which was chosen by 0.72% of the total applications.
+
+For the locations of the international colleges where students applied, the top location was North America, which accounted for 66.23% of the total college applications submitted by the respondents. The next top location was Asia, which was selected for 16.23% of the international college applications gathered. These are followed by Australia/Oceania and Europe, which accounted for 13.19% and 4.35% of the total international applications, respectively."""
+    )
+
     # Interests
 
     chart_checkbox(
@@ -296,6 +316,14 @@ def feature_overview(db):
         st_key = "interests_chart",
     )
 
+    st.info(
+"""From local and international colleges, the top interest seen among students is Science, Technology, Engineering, and Mathematics (STEM)-oriented endeavors at 57.91%. After STEM-oriented interests are the following in descending order of popularity: Accountancy, Business, and Management (ABM)-oriented, Humanities, Education, and Social Sciences (HUMSS)-oriented, Arts and Design (AD)-oriented, Sports-oriented, and Technical-Vocational-Livelihood (TVL) -oriented interests. Students chose ABM-oriented and HUMSS-oriented interests for 36.91% and 33.33% of their local and international college applications, respectively. The interests least chosen by students for their local and international college applications are AD-oriented interests with 15.31%, Sports-oriented interests with 5.16%, and TVL-oriented interests with 4.07%. 
+
+Each student chose STEM-oriented as their top interest for 58.60% of their local college applications. Moreover, students also chose ABM-oriented and HUMSS-oriented interests for 37.13% and 33.88% of their local college applications, respectively. The interests least chosen by students for their local college applications are AD-oriented interests with 15.37%, Sports-oriented interests with 5.16%, and TVL-oriented interests with 4.15%. 
+
+Each student chose STEM-oriented as their top interest for 48.26% of their international college applications. Additionally, students also chose ABM-oriented and HUMSS-oriented interests for 33.04% and 30.29% of their international college applications, respectively. The interests least chosen by students for their  international college applications are AD-oriented interests with 21.74%, Sports-oriented interests with 4.35%, and TVL-oriented interests with 2.17%."""
+    )
+
     # Characteristics
 
     chart_checkbox(
@@ -304,4 +332,10 @@ def feature_overview(db):
         singular = "characteristic",
         intro = "## Characteristics\n\nThis chart is about the college characteristics that were the reasons behind students' application choices.",
         st_key = "characteristics_chart",
+    )
+
+    st.info(
+"""For local and international applications combined, the top characteristic considered by students was: **Perceived high quality of education**. On average, each student chose this characteristic for 90.05% of their college applications. Students also valued the availability of specific courses and their perceived employability after graduation, accounting for 50.25% and 47.29% of each respondent's applications, respectively.
+
+The perceived high quality of education, availability of specific courses, rate of employability, popularity, and low tuition fee are the top five qualities considered for local applications. For international applications, the top attributes are comparable, with high-quality education remaining at the top, followed by popularity, availability of specific courses, rate of employability, and the option for financial aid for tuition fee reduction. Low tuition rate, which is the fifth most common factor in each student's local applications, only accounts for 10.87%  of each respondent’s international applications."""
     )
