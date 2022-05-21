@@ -294,7 +294,7 @@ The average number of colleges applied to by each respondent for the local, and 
         db = db,
         info_type = "location",
         singular = "location",
-        intro = "## Locations of Colleges\n\nThis chart shows the locations of the colleges where students applied.",
+        intro = "## Locations of Colleges",
         st_key = "location_chart",
     )
 
@@ -312,7 +312,7 @@ For the locations of the international colleges where students applied, the top 
         db = db,
         info_type = "interests",
         singular = "interest",
-        intro = "## Interests\n\nThis chart is about the fields of study that were the reasons behind students' college application choices.",
+        intro = "## Interests",
         st_key = "interests_chart",
     )
 
@@ -330,7 +330,7 @@ Each student chose STEM-oriented as their top interest for 48.26% of their inter
         db = db,
         info_type = "characteristics",
         singular = "characteristic",
-        intro = "## Characteristics\n\nThis chart is about the college characteristics that were the reasons behind students' application choices.",
+        intro = "## Characteristics",
         st_key = "characteristics_chart",
     )
 
