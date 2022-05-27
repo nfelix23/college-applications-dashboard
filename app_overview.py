@@ -335,7 +335,7 @@ Each student chose STEM-oriented as their top interest for 48.26% of their inter
     )
 
     st.info(
-"""For local and international applications combined, the top characteristic considered by students was: **Perceived high quality of education**. On average, each student chose this characteristic for 90.05% of their college applications. Students also valued the availability of specific courses and their perceived employability after graduation, accounting for 50.25% and 47.29% of each respondent's applications, respectively.
+"""For local and international applications combined, the top characteristic considered by students was: "Perceived high quality of education." On average, each student chose this characteristic for 90.05% of their college applications. Students also valued the availability of specific courses and their perceived employability after graduation, accounting for 50.25% and 47.29% of each respondent's applications, respectively.
 
 The perceived high quality of education, availability of specific courses, rate of employability, popularity, and low tuition fee are the top five qualities considered for local applications. For international applications, the top attributes are comparable, with high-quality education remaining at the top, followed by popularity, availability of specific courses, rate of employability, and the option for financial aid for tuition fee reduction. Low tuition rate, which is the fifth most common factor in each student's local applications, only accounts for 10.87%  of each respondent’s international applications."""
     )
