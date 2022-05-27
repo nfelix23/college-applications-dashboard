@@ -31,11 +31,11 @@ The third page is the College Info Charts page. The user can use the drop-down b
 
 a. Utilize a more diverse respondent range. 
 
-The study participants were only limited to a single grade level from only one institution due to the difficulty of finding respondents in the current online setup. Therefore, due to the lack of diversity of the respondents, the data collected may not be an accurate representation of the reason as to why they chose the colleges and universities that they applied to. Furthermore, the demographics may have significantly affected the data collected since their situations and experiences directly affect their views and opinions. It would be more preferable to distribute the surveys to students from other senior high schools inside and outside Metro Manila in order for colleges to be represented better in the dashboard.
+The study participants were limited to a single grade level from only one institution due to the difficulty of finding respondents in the current online setup. Therefore, due to the lack of diversity of the respondents, the data collected may not be an accurate representation of the reason as to why they chose the colleges and universities that they applied to. Furthermore, the demographics may have significantly affected the data collected since their situations and experiences directly affect their views and opinions. It would be more preferable to distribute the surveys to students from other senior high schools inside and outside Metro Manila in order for colleges to be represented better. Also, distributing a future survey much earlier into the school year would have increased the number of participants from the ASHS.
 
-b. Conduct interviews or focus group discussions.
+b. Collect more comprehensive data.
 
-Since the study utilized the use of google form surveys, we were not able to get a detailed response from the participants as to why they selected their chosen schools. Aside from the “others” function that we were able to put in the survey, there were no other ways in which we could get an in-depth response from the respondents, and conducting interviews and FGDs might be a solution to that."""
+Since the study utilized the use of google form surveys, we were not able to get a detailed response from the participants as to why they selected their chosen schools. Aside from the “others” function that we were able to put in the survey, there were no other ways in which we could get an in-depth response from the respondents, and conducting interviews and FGDs might be a solution to that. Students’ interests were also limited to strand and track groups instead of actual college programs. Researchers may explore other research instruments to accommodate more specific responses."""
     )
 
     # References
