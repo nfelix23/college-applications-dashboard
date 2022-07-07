@@ -162,6 +162,7 @@ def feature_filter_rank(db):
 
         rank_df = rank_df.loc[coll_type_mask]
         rank_df["num_students"] = 1
+
         rank_df = (
             rank_df.pivot_table(
                 index = ["name", "location"],
@@ -169,7 +170,19 @@ def feature_filter_rank(db):
                 aggfunc = "sum",
             )
             .reset_index(drop = False)
-            .sort_values("num_students", ascending = False)
+        )
+
+        # Add column with rankings. Dense method is used, i.e., minimum rank is used to break ties and rank always increases by 1 between groups of colleges with the same rank.
+        rank_df["rank"] = (
+            rank_df["num_students"]
+            .rank(method = "dense", ascending = False)
+            .astype("int64")
+        )
+        
+        # Sort rows by rank, ascending, so 1 then 2 and so on.
+        rank_df = (
+            rank_df
+            .sort_values("rank", ascending = True)
             .reset_index(drop = False)
         )
 
@@ -187,13 +200,15 @@ def feature_filter_rank(db):
 
         for i, row in rank_df.iterrows():
 
-            rank = i + 1
-            if rank > show_top:
+            # Placement refers to the ordinal position of the college relative to the other colleges displayed, regardless of ranks and ties. Do not show colleges past the limit set by the user.
+            placement = i + 1
+            if placement > show_top:
                 st.stop()
 
             college_name = row['name']
             num_students = row["num_students"]
             locn = row["location"]
+            rank = row["rank"]
 
             st.markdown(f"{rank}. **{college_name}**")
 
