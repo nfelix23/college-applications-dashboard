@@ -185,15 +185,15 @@ def feature_filter_rank(db):
 
         st.markdown("---")
 
-        for i, row_rank in rank_df.iterrows():
+        for i, row in rank_df.iterrows():
 
             rank = i + 1
             if rank > show_top:
                 st.stop()
 
-            college_name = row_rank['name']
-            num_students = row_rank["num_students"]
-            locn = row_rank["location"]
+            college_name = row['name']
+            num_students = row["num_students"]
+            locn = row["location"]
 
             st.markdown(f"{rank}. **{college_name}**")
 
@@ -249,13 +249,13 @@ def feature_filter_rank(db):
 
         selected_reference_df = db.ddict.loc[db.ddict["var_name"].isin(selected_columns)]
 
-        for i, row_rank in rank_df.iterrows():
+        for i, row in rank_df.iterrows():
 
             rank = i + 1
             if rank > show_top:
                 st.stop()
 
-            college_name = row_rank['name']
+            college_name = row['name']
 
             st.markdown(f"{rank}. {college_name}")
 
@@ -264,7 +264,7 @@ def feature_filter_rank(db):
                 for info_type in final_info_types:
 
                     if info_type == "location":
-                        st.markdown(f"{info_type.title()}: {row_rank['location']}")
+                        st.markdown(f"{info_type.title()}: {row['location']}")
 
                     else:
                         st.markdown(f"{info_type.title()}:")
@@ -276,7 +276,7 @@ def feature_filter_rank(db):
                         for j, row_reference in filtered_reference_df.iterrows():
                             var_name = row_reference["var_name"]
                             long_name = row_reference['long_name']
-                            num_students = row_rank[var_name]
+                            num_students = row[var_name]
 
                             st.markdown(f"- {long_name}: **{num_students} students**")
 
