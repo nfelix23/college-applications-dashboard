@@ -1,3 +1,6 @@
+# To create a conda environment from this file, run the following command in Anaconda Prompt. Replace ENV_NAME with the desired name for the new environment.
+# conda env create --name ENV_NAME --file local_dev_environment.yml
+# 
 channels:
   - conda-forge
   - defaults
