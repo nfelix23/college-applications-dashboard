@@ -4,4 +4,3 @@
 /.streamlit/secrets.toml
 *.bat
 private_*.py
-.gitignore
