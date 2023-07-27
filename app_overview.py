@@ -123,7 +123,14 @@ def feature_overview(db):
             .encode(
                 x = alt.Y("num_apps:O", title = "Number of Colleges"),
                 y = alt.X("num_students:Q", title = "Number of Students"),
-                color = alt.Color("is_median:N", legend = None),
+                color = alt.Color(
+                    "is_median:N",
+                    legend = None,
+                    scale = alt.Scale(
+                        domain = ["No", "Yes"],
+                        range = ["#2986cc", "#ce7e00"] # blue, orange
+                    )
+                ),
                 tooltip = [
                     alt.Tooltip("num_students:Q", title = "Number of Students"),
                 ]

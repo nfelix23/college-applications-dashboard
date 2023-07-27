@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # Dictionary containing sheet names and their respective URLs
     sheets_urls = st.secrets["private_gsheets_url"]
 
-    @st.cache(suppress_st_warning = True, allow_output_mutation = True)
+    @st.cache_data(ttl = None)
     def get_data():
         """Obtain data used by the app."""
 
