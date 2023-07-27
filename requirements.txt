@@ -3,6 +3,6 @@ pandas==1.5.3
 numpy==1.20.3
 streamlit==1.22.0
 pip==21.2.4
-gsheetsdb==0.1.9
+gsheetsdb==0.1.13
 google-auth==2.3.3
 pyparsing==3.1.0
